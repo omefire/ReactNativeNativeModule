@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,14 +16,14 @@ import {
   View,
   Text,
   StatusBar,
+  TextInput,
+  Button,
+  Alert,
 } from 'react-native';
 
 import {
   Header,
-  LearnMoreLinks,
   Colors,
-  DebugInstructions,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
 import RNBootSplash from 'react-native-bootsplash';
@@ -32,8 +32,11 @@ declare var global: {HermesInternal: null | {}};
 
 const App = () => {
   let init = async () => {
-
+    // ...
   };
+
+  const [textToSign, setTextToSign] = useState("");
+  const [digitallySignedText, setDigitallySignedText] = useState("");
 
   useEffect(() => {
     init().then(() => {
@@ -56,31 +59,34 @@ const App = () => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
-              </Text>
+              <Text style={styles.sectionTitle}>Enter text to be signed:</Text>
+              <TextInput
+                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 15 }}
+                value={textToSign}
+                onChangeText={(text) => {
+                  setTextToSign(text);
+                  setDigitallySignedText("");
+                }}
+               />
+               <Button
+                title="Digitally sign text"
+                color="#f194ff"
+                onPress={() => {
+                  if(textToSign === "") {
+                    Alert.alert("Please, make sure to enter a text to be signed")
+                    return
+                  }
+                  
+                  setDigitallySignedText("Omar Mefire");
+                }}
+                />
             </View>
+          </View>
+          <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
+              <Text style={styles.sectionTitle}>Digitally signed text:</Text>
+              <Text style={{fontSize: 20, fontWeight: '300'}}>{digitallySignedText}</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
           </View>
         </ScrollView>
       </SafeAreaView>
