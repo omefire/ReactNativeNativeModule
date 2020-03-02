@@ -19,6 +19,7 @@ import {
   TextInput,
   Button,
   Alert,
+  NativeModules,
 } from 'react-native';
 
 import {
@@ -71,13 +72,15 @@ const App = () => {
                <Button
                 title="Digitally sign text"
                 color="#f194ff"
-                onPress={() => {
+                onPress={async () => {
                   if(textToSign === "") {
-                    Alert.alert("Please, make sure to enter a text to be signed")
-                    return
+                    Alert.alert("Please, make sure to enter a text to be signed");
+                    return;
                   }
+
+                  let digitallySignedText = await NativeModules.KeyStore.digitallySign(textToSign).catch((error: any) => Alert.alert(JSON.stringify(error)));
+                  setDigitallySignedText(digitallySignedText);
                   
-                  setDigitallySignedText("Omar Mefire");
                 }}
                 />
             </View>
